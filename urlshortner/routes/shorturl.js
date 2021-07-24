@@ -12,6 +12,8 @@ var shortUrlRoute = express.Router();
 shortUrlRoute.post("/", async (req, res)=>{
 
     const longUrl = req.body.longUrl;
+    
+    // base URl for that we can use our DOMAIN or 3rd party DNS services 
     const baseUrl = config.get("baseURL");
     
     console.log("base url " + baseUrl + "   " + longUrl);
