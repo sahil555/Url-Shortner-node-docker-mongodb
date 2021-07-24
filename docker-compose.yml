@@ -1,0 +1,41 @@
+version: '3.8'
+
+
+services: 
+
+    loadbalancer:
+        build: ./nginx
+        restart: always
+        ports: 
+            - "80:80"
+        networks: 
+            - network
+
+    db:
+        image: mongo
+        restart: always
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: express-user
+            MONGO_INITDB_ROOT_PASSWORD: password_is_tough
+        
+        volumes: 
+            - ./database:/data/db
+        networks:
+            - network
+        
+
+    
+    backend:
+        build: ./urlshortner
+        restart: on-failure
+        volumes: 
+            - ./urlshortner:/app
+        networks:
+            - network
+        depends_on: 
+            - db
+            - loadbalancer
+
+networks: 
+    network:
+        driver: bridge
